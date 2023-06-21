@@ -66,3 +66,18 @@ localhost:3000 => views/index.html
 localhost:3000/swap => views/ha_swap.html
 localhost:3000/subdir => subdir/index.html
 */
+
+/*
+git init
+git branch -M master
+git remote add origin https://github.com/choiswan49/frontend_4.git
+
+git pull origin master
+수정
+
+git add .
+git commit -m "설명"
+git config --global user.email ""
+git config --global user.name ""
+git push -u origin master
+*/

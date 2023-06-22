@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="log">
+        <div class="title"></div>
+        <div class="content"></div>
+    </div>
+    <script>
+        fetch('./data/seafood.CSV')
+        .then(res=>res.text())
+        .then(res=>{
+            // document.querySelector('.log').innerHTML = res;
+            const lines = res.split('\n');
+
+            const lines10 = lines.slice(0,10)
+            console.log(lines10);
+
+            const title = lines10.slice(0, 1);
+            let str = '';
+            title.forEach(data=>{
+                str += `<span class="td">${data}</span>`
+            })
+            document.querySelector('.log .title').innerHTML = str;
+
+            const content = lines10.slice(1 );
+            str = '';
+            content.forEach(data=>{
+                str += `<div class="td">${data}</div>`
+            })
+            document.querySelector('.log .title').innerHTML = str;
+        })
+    </script>
+</body>
+</html>

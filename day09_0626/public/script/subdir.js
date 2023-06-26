@@ -1,0 +1,1 @@
+alert('subdir.js');

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>회원 삭제, 탈퇴</h1>
+    <div class="container">
+        <label for="first_name">first_name</label>
+        <input type="text" id="first_name" autofocus>
+        <label for="last_name">last_name</label>
+        <input type="text" id="last_name"><br>
+        <button id="user_del_btn">삭제</button>
+    </div>
+    <div class="log_delete"></div>
+    <script>
+        user_del_btn.addEventListener('click', ()=>{
+            // console.log('submit');
+            const fn_value = document.querySelector('#first_name').value;
+            const ln_value = document.querySelector('#last_name').value;
+            const user = {
+                first_name : fn_value,
+                last_name : ln_value
+            }
+
+            fetch('http://localhost:3000/name', {
+                method : 'DELETE',
+                body : JSON.stringify(user),
+                headers : {'Content-type' : 'application/json'}
+            }).then(res=>res.json())
+            .then(res=>{
+                document.querySelector('.log_delete').innerHTML = res.message;
+                document.querySelector('#first_name').value = '';
+                document.querySelector('#last_name').value = '';
+
+                setTimeout(()=>{
+                    document.querySelector('.log_delete').innerHTML = '';
+                }, 5000)
+            })
+        })
+    </script>
+</body>
+</html>

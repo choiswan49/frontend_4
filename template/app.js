@@ -4,13 +4,18 @@
 /register/get : confirm get
 /register/confirm : post, get
 /register/delete
+/register/:id delete
 /register/put
+/register/:id put
 
 // 로그인
+/login/get
 /login/post
+/logout/get|post
 
 // 장바구니, product
-/product/get
+/product/:id get
+/product/get/list
 /product/post
 /product/delete
 /product/put
@@ -22,7 +27,8 @@ const fs = require('fs');
 const path = require('path');
 const PORT = 3000;
 
-app.use(express.static('/public')); // 공유폴더 지정
+app.use('/', express.static('/public')); // 공유폴더 지정
+app.use('/product', express.static(path.join(__dirname, '/model'))); // 공유폴더 지정
 app.use(express.json()); // json 포맷 사용
 app.use(express.urlencoded({extended:false})); // form 데이터 읽기
 
@@ -33,13 +39,19 @@ app.get('/register', (req, res)=>{
     res.sendFile(path.join(__dirname, 'views', 'register.html'))
 })
 app.get('/register/confirm', (req, res)=>{})
+
 app.post('/register', (req, res)=>{
+    // err 제어 제외
     const newUser = req.body;
     const rows = fs.readFileSync(path.join(__dirname, 'model', 'users.json'));
     const users = JSON.parse(rows);
 
     // 기존에 정보가 있다면 중복데이터로 처리불가
-    users.push(newUser);
+    const id = users[users.length - 1].id + 1;
+    // newUser.id = id; // id 속성을 맨 뒤에 추가
+    const inputUser = {id, ...newUser}; // 맨 앞에 추가. 순서 상관 없음
+    console.log("newUser : ", inputUser);
+    users.push(inputUser);
     fs.writeFileSync(path.join(__dirname, 'model', 'users.json'),
         JSON.stringify(users, null, " "),
         'utf-8',
@@ -52,15 +64,53 @@ app.post('/register', (req, res)=>{
     }
     res.send(res_message)
 })
-app.delete('/register', (req, res)=>{})
-app.put('/register', (req, res)=>{})
+app.delete('/register', (req, res)=>{});
+app.put('/register', (req, res)=>{});
 
-app.post('/login', (req, res)=>{})
+ // 로그인 화면
+app.get('/login', (req, res)=>{
+    try{
+        res.sendFile(path.join(__dirname, 'views', 'login.html'));
+    }catch(err){
+        console.log(err);
+        res.status(500).send({success:false, message:'내부적 오류'})
+    }
+});
 
-app.get('/product', (req, res)=>{})
-app.post('/product', (req, res)=>{})
-app.delete('/product', (req, res)=>{})
-app.put('/product', (req, res)=>{})
+// 로그인 버튼 클릭 시
+// db에 정보가 존재하면 로그인, 없으면 err
+app.post('/login', (req, res)=>{
+    const user = req.body;
+    const {user_id, user_pwd} = req.body;
+    try{
+        const rows = fs.readFileSync(path.join(__dirname, 'model', 'users.json'));
+        const users = JSON.parse(rows);
+
+        const find = users.find(data=>data.user_id === user.user_id && data.user_pwd === user_pwd);
+        if (find){
+            res.send({success : true, message : user_id})
+        }else{
+            res.send({success : false, message : '사용자를 찾을 수 없습니다.'})
+        }
+    }catch(err){
+        console.log(err);
+        res.status(500).send({success:false, message:'내부적 오류'})
+    }
+});
+app.post('/logout', (req, res)=>{});
+// app.get('/logout', (req, res)=>{});
+
+app.get('/product', (req, res)=>{
+    try{
+        res.sendFile(path.join(__dirname, 'views', 'product.html'));
+    }catch(err){
+        console.log(err);
+        res.status(500).send({success:false, message:'내부적 오류'})
+    }
+});
+app.post('/product', (req, res)=>{});
+app.delete('/product', (req, res)=>{});
+app.put('/product', (req, res)=>{});
 
 app.listen(PORT, ()=>{
     console.log('listening port ', PORT);

@@ -1,0 +1,26 @@
+<!-- http 프로토콜이 인증 정보로 사용하기 위한 도구 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>cookie 확인 </h1>
+    <script>
+        console.log(document.cookie);
+        const today = new Date();
+        today.setDate(today.getDate() + 1);
+        
+        document.cookie = `brand_name=moooi;expires=${today.toUTCString()};Path=/cookie`
+    </script>
+    <!-- 
+        1. key=value
+        2. 구분 기호 ;
+        3. expires : 날짜 toUTCString() 형태
+        4. path : cookie 사용 범위 제한
+        5. httpOnly : http로 접근했을 때만 쿠키를 사용할 수 있도록 허용
+     -->
+</body>
+</html>

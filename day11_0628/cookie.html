@@ -1,0 +1,83 @@
+<!-- http 프로토콜이 인증 정보로 사용하기 위한 도구 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .cookie-container{
+            width: 800px; height: 200px;
+            background-color: skyblue;
+            padding: 30px;
+        }
+        .popup-container{
+            width: 200px; height: 100px;
+            background-color: black;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>cookie 확인 </h1>
+    <button id="cookieDelBtn">쿠키 삭제</button>
+    <div class="cookie-container">
+        <h3>쿠키 허용 확인</h3>
+        <p>이 사이트를 귀하의 웹 사이트에 쿠키를 저장하고 당사의 쿠키 정책에 따라 정보를 공개할 수 있습니다.
+            <a href="#">자세히 보기</a>
+        </p>
+        <button id="acceptBtn">허용</button>
+        <button id="closeBtn">닫기</button>
+    </div>
+    <div class="popup-container">
+        <input type="checkbox" id="oneday">
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        $('#acceptBtn').on('click', function(){
+            setCookie('brand', 'korea', 30);
+            $('.cookie-container').css('display', 'none');
+        })
+        function setCookie(name, value, date){
+            let str = `${name}=${value};`;
+            const today = new Date();
+            today.setDate(today.getDate() + date);
+            str += `expires=${today.toUTCString()}`
+            // str += `Max-age=${10}`
+
+            document.cookie = str;
+        }
+
+        $(function(){
+            $('.cookie-container').css('display', 'block');
+            const cookies = document.cookie;
+            console.log(cookies);
+
+            const cookieAry = cookies.split(';');
+            cookieAry.forEach(data=>{
+                if (data.includes('korea')){
+                    $('.cookie-container').css('display', 'none');
+                }
+                if (data.includes('oneday=done')){
+                    $('.popup-container').hide();
+                }
+            })
+        })
+
+        $('#cookieDelBtn').on('click', function(){
+            setCookie('brand', 'korea', -1); // 어제 날짜로 설정해서 지워진 거처럼 보임
+        })
+
+        $('#oneday').on('change', function(){
+            if (document.querySelector('#oneday').checked){
+                setCookie('oneday', 'done', 1);
+            }else{
+                setCookie('oneday', '', 1);
+            }
+
+            
+        })
+    </script>
+</body>
+</html>

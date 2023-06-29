@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>index</h1>
+    <div class="log">
+        <span></span>
+        <button class="logout">로그아웃</button>
+    </div>
+    <script>
+        window.addEventListener('DOMContentLoaded', ()=>{
+            const log = document.querySelector(".log");
+            // const user = localStorage.getItem('user');
+            console.log(document.cookie);
+            // cookie-parse가 처리하도록 만들어줘야 함
+            // fecth
+            
+            if (!user){
+                log.style.display = 'none';
+                // location.href = 'http://localhost:3000/login'
+            }else{
+                log.style.display = 'block';
+                document.querySelector('.log>span').innerHTML = user;
+            }
+        })
+        document.querySelector('.logout').addEventListener('click', ()=>{
+            document.querySelector('.log').style.display = "none";
+            document.querySelector('.log>span').innerHTML = "";
+            // localStorage.removeItem('user');
+            // location.href = 'http://localhost:3000/login'
+        })
+    </script>
+</body>
+</html>

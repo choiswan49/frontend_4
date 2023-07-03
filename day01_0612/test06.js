@@ -11,7 +11,7 @@ console.log(merge); // { a: 3, b: 4, x: 'hello', y: 2 }
 
 // Object.assign() : 객체 복사
 // Object.keys() : 객체의 키 값 배열로
-// Object.entries() : 객체의 vale 값 배열로
+// Object.values() : 객체의 vale 값 배열로
 // Object.entries() : {키 : value}  배열로 
 
 keys = Object.keys(merge);

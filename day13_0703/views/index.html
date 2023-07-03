@@ -18,6 +18,7 @@
             console.log(document.cookie);
             // cookie-parse가 처리하도록 만들어줘야 함
             // fecth
+            
             if (!document.cookie.includes('username')){
                 log.style.display = 'none';
                 // location.href = 'http://localhost:3000/login'
@@ -26,9 +27,8 @@
                 document.querySelector('.log>span').innerHTML = document.cookie;
             }
         })
-
-
         document.querySelector('.logout').addEventListener('click', ()=>{
+
             fetch('http://localhost:3000/logout')
             .then(res=>res.json())
             .then(res=>{

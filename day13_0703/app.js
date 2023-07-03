@@ -3,6 +3,7 @@ const app = express();
 const path = require('path');
 const PORT = 3000;
 const cookieParser = require('cookie-parser');
+const expiresSession = require('express-session');
 
 const root = require('./routes/root');
 const register = require('./routes/register');
@@ -11,7 +12,19 @@ const logout = require('./routes/logout');
 const product = require('./routes/product');
 
 app.use(cookieParser());
-app.use(express.static('/public')); // 공유폴더 지정
+
+// getIndex()
+app.use(expiresSession({
+    name : 'Ko_SID',
+    secret : 'my section password',
+    resave : true,
+    saveUninitialized : true,
+    cookie : {
+        brandname : 'korea',
+        // maxAge : 1 * 10,
+    }
+}))
+app.use('/', express.static('/public')); // 공유폴더 지정
 app.use('/product', express.static(path.join(__dirname, '/model'))); // 공유폴더 지정
 
 app.use(express.json()); // json 포맷 사용
